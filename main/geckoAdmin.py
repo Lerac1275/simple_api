@@ -4,6 +4,7 @@ from datetime import datetime
 import time 
 
 # Collection of ticker to id mappings, obtained from searching the ticker with .search(query)
+# Mapping in the form {"symbol/ticker : coin_id"}
 id_maps = {'ETH' : 'ethereum'
            , 'BTC' : 'bitcoin'
            , 'USDC' : 'usd-coin'
@@ -64,13 +65,17 @@ def get_all_coin_info(start_date : Union[str, datetime.date], end_date : Union[s
     """
     Function to consolidate records from ALL 4 examined coin types. Used to speed up comparison aggregation later on
     """
-    final = pd.DataFrame()
+    # final = pd.DataFrame()
+    result = {}
     for ticker, id_name in id_maps.items():
         # Get the coin information for the selected time period
         tdf = get_coin_info(coin_id=id_name, start_date=start_date, end_date=end_date, vs_currency=vs_currency)
         # Attach the ticker name
         tdf['coin'] = ticker
         # Append to result
-        final = pd.concat([final, tdf])
+        result[ticker]=tdf
     # Return the final dataframe containing info for all coins
-    return final
+    return result
+
+def get_all_coin_info():
+    return pd.DataFrame(gk.get_coins_list())
