@@ -77,5 +77,5 @@ def get_all_coin_info(start_date : Union[str, datetime.date], end_date : Union[s
     # Return the final dataframe containing info for all coins
     return result
 
-def get_all_coin_info():
+def get_all_listed_coins():
     return pd.DataFrame(gk.get_coins_list())

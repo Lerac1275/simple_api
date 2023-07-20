@@ -20,12 +20,12 @@ def plot_comp_metrics(master_dict:dict, metric:str = 'prices_sgd', coins:list[st
     px.line
         A plotly express chart depicting the comparison of the selected metric
     """
-    # Filter for the relevant coins if needed
-    tdf = pd.DataFrame()
-    for coin in coins:
-        tdf = pd.concat([tdf, master_dict[coin]])
     if not coins:
         return px.line()
+    tdf = pd.DataFrame()
+    # Filter for the relevant coins if needed
+    for coin in coins:
+        tdf = pd.concat([tdf, master_dict[coin]])
     fig = px.line(tdf, x="datetime", y=metric, color="coin"
                   , title = f"Graph of {metric}")
     return fig

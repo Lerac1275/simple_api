@@ -22,8 +22,9 @@ def indiv_coin_info_call(coin_id, start_date, end_date, vs_currency:str='sgd'):
 
 @st.cache_data
 def get_coin_ticker_ids():
-    return gk.get_all_coin_info()
+    return gk.get_all_listed_coins()
 
+# Store all valid crypto coins as listed in coinGecko
 coin_info_df = get_coin_ticker_ids()
 
 # Store tickers of all default coins
@@ -36,6 +37,7 @@ st.subheader('Powered by coinGecko')
 st.header("Coin ID & Date selection ")
 st.text(f"These coins : {default_coins} are included by default.")
 coin_id=st.text_input("Would you like to add another for comparison?")
+# Start and end date calendar selectors
 start_date = st.date_input("Comparison start date", datetime.date(2021, 2, 1))
 end_date = st.date_input("Comparison end date", datetime.date(2021, 7, 1))
 
@@ -44,7 +46,6 @@ end_date = st.date_input("Comparison end date", datetime.date(2021, 7, 1))
 # If this breaks then don't run anything else
 if end_date < start_date:
     st.warning("Invalid interval range. The end date comes before the start date.", icon='⚠️')
-
 
 else:
     # Extract all the data for the default coins
@@ -63,9 +64,6 @@ else:
         master_dict[coin_ticker] = new_coin_df
         all_coins.append(coin_ticker)
 
-
-
-
     # Main coin under examination
     main_coin = st.selectbox('Select main coin to examine', all_coins)
     # Display the dataframe with information for only the selected main coin
@@ -83,6 +81,7 @@ else:
         , options=all_coins
         , default=all_coins
     )
+    # display the chart
     comparison_chart = gp.plot_comp_metrics(master_dict=master_dict, metric=metric, coins=coin_selection)
     st.plotly_chart(comparison_chart, use_container_width=True)
 
